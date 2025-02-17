@@ -38,13 +38,20 @@ Write the specification for a software module on the API service (backend applic
 
 **Solution:**
 1. For server, we can use the express, cors and body-parser first ro run on a specified port.
+
 2. For database's item, we should have a table for 
 - user (userID (primary_key), userFirstName, userLastName, userEmail, userPassword (hashed), userRole, userScore)
-- soccer teams (teamID(primary_key), teamName, teamCaptain)
-- competeDate(dateID(primary_key), dateTime, matchID)
-- matches(matchID(primary_key), team1ID, team2ID, team1Score, team2Score)
 
-3. Controller files. These files will be the one to access the database and get what the user need. There should be first, userController (getting the users' info, update the score and check for authorization and if the user can change the score themselves or not), matchController (getting the info on the live matches by implementing outside's API and insert more info into other databases like the matches table)
-4. Flowchart [https://lucid.app/lucidchart/8c46ad42-be2d-433a-a63b-f16c11a4007b/edit?viewport_loc=-6%2C-465%2C1921%2C838%2C0_0&invitationId=inv_9fbd5c85-37fc-46d2-9b3f-085a43dfbd33]
+
+3. Controller file. This file will be the one to access the database and get what the user need. There should be first, userController 
+- create new user(store their info into db with password hashed, and access and refresh token return to the client)
+- getting the top 10 users with highest score, update the score  
+- update the score. Remember to check for authorization and if the user can change the score themselves or not by checking the access token and the role in the db
+4. Diagram to show the flow: [https://lucid.app/lucidchart/8c46ad42-be2d-433a-a63b-f16c11a4007b/edit?viewport_loc=-6%2C-465%2C1921%2C838%2C0_0&invitationId=inv_9fbd5c85-37fc-46d2-9b3f-085a43dfbd33]
+
+5. Frontend:  We can have a state hook to check the score of the user. So when they do the action=> update the score, Frontend will fetch the info again and show the new score or we can simply reload the page via window.location.reload()
+
+6. More on authorization. 
+For starter, user should be defaulted as just "user", and not some special role like "admin". Secondly, every time, a new user sign up, beside storing into db, we can also send to them the refresh token and access token using jwt web token and sign in with a secret key. This way, along with the role in the db, we can know if they are authorized or not. And when the access token expired, then they can send a post request alongside the refresh token, we check that and resend them new access token. Let's say, if the client manage to find the API path to increase the score along with the compatible request's body , they will still need to provide the access token in order to be accepted.
 
 
